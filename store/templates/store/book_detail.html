@@ -20,7 +20,43 @@
     <dd>Rs.{{book.mrp}}</dd>
     <dt>Available Copies:</dt>
     <dd>{{num_available}}</dd>
+    <dt>Rate the book:(Between 0 to 10)</dt>
 </dl>
+
+<input type="text" id="rating"><button class="btn btn-primary" onclick="Rating()">Submit</button>
+<script>
+function Rating(){
+  var x = document.getelementbyid('rated').value;
+  if(x>=0 && x<=10){
+      $.ajax({
+		url:"{% url 'rating-book' %}",
+		method:"POST",
+		data:{
+			bid: {{book.id}}
+      rating: x
+
+
+		},
+		success:function(data,status,xhr){
+			if(data['message']==1){
+                alert("Book successfully rated");
+                  location.reload(true);
+              //  window.location.replace("/books/loaned");
+			}
+			else{
+				alert("Unable to rate this book");
+			}
+		},
+		error:function(xhr,status,err){
+			alert("Some error occured");
+		}
+
+	})
+}
+  else{}
+  alert('enter value between 0 & 10');
+}
+</script>
 <button class="btn btn-primary" id="loan-button">Loan {{book.title}}</button>
 <script>
 $("#loan-button").click(function(){

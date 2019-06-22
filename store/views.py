@@ -62,6 +62,22 @@ def viewLoanedBooks(request):
 
 
     return render(request,template_name,context=context)
+@csrf_exempt
+@login_required
+def rating_bookView(request):
+    template_name='store/book_detai.html'
+    response_data={
+             'message':1,
+         }
+
+    book_id = request.POST.get("bid")
+    ex = Book.objects.get(id=book_id);
+    ex.num_rating = ex.num_rating + float(rating);
+    ex.total_user = ex.total_user + int(1);
+    ex.rating = float(ex.num_rating / ex.total_user);
+    ex.save();
+    
+    return JsonResponse(response_data)
 
 @csrf_exempt
 @login_required
